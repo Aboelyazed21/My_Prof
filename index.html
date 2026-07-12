@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portfolio of Aboelyazed Hatem - Professional Web Developer and Designer" />
+    <meta name="keywords" content="web developer, designer, portfolio, react, javascript, frontend, backend" />
+    <meta name="author" content="Aboelyazed Hatem" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aboelyazedhatem.com/" />
+    <meta property="og:title" content="Aboelyazed Hatem - Web Developer & Designer" />
+    <meta property="og:description" content="Professional portfolio showcasing web development and design projects" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://aboelyazedhatem.com/" />
+    <meta property="twitter:title" content="Aboelyazed Hatem - Web Developer & Designer" />
+    <meta property="twitter:description" content="Professional portfolio showcasing web development and design projects" />
+    
+    <title>Aboelyazed Hatem - Web Developer & Designer</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Prevent FOUC -->
+    <style>
+      html { visibility: hidden; }
+      html.loaded { visibility: visible; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Prevent FOUC
+      document.addEventListener('DOMContentLoaded', function() {
+        document.documentElement.classList.add('loaded');
+      });
+    </script>
+  </body>
+</html>
