@@ -7,17 +7,59 @@ import { AnimatedSection } from './AnimatedSection';
 
 export const Contact: React.FC = () => {
   const { t } = useLanguage();
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: ''
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission here
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://sheetdb.io/api/v1/fhm90yqndrlih', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          data: [
+            {
+              name: formData.name,
+              Email: formData.email,
+              Phone: formData.phone,     
+              Subject: formData.subject,
+              Message: formData.message
+            }
+          ]
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.created === 1) {
+        alert('تم إرسال الرسالة بنجاح!');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      }
+    } catch (error) {
+      console.error('حدث خطأ أثناء الإرسال:', error);
+      alert('حدث خطأ أثناء إرسال الرسالة، يرجى المحاولة مرة أخرى.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -53,6 +95,7 @@ export const Contact: React.FC = () => {
               </h3>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -87,20 +130,38 @@ export const Contact: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {t('subject')}
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300"
-                    placeholder={t('messageSubject')}
-                    required
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {t('phone')}
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300"
+                      placeholder="+20 100 000 0000"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {t('subject')}
+                    </label>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300"
+                      placeholder={t('messageSubject')}
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -121,10 +182,11 @@ export const Contact: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 font-medium flex items-center justify-center space-x-2"
+                  disabled={isSubmitting}
+                  className={`w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'} font-medium flex items-center justify-center space-x-2`}
                 >
-                  <FiSend />
-                  <span>{t('sendMessageBtn')}</span>
+                  <FiSend className={isSubmitting ? 'animate-pulse' : ''} />
+                  <span>{isSubmitting ? 'جاري الإرسال...' : t('sendMessageBtn')}</span>
                 </button>
               </form>
             </div>
@@ -155,19 +217,19 @@ export const Contact: React.FC = () => {
                     {
                       icon: FiMapPin,
                       title: t('location'),
-                      content: 'Kafr El-Sheikh, Egypt',
+                      content: 'Desouk, Kafr El-Sheikh',
                       color: 'bg-purple-500'
                     }
                   ].map((item, index) => (
-                    <div key={index} className="flex items-start space-x-4 space-x-reverse">
-                      <div className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center text-white`}>
-                        <item.icon size={20} />
+                    <div key={index} className="flex items-center gap-4">
+                      <div className={`w-10 h-10 shrink-0 ${item.color} rounded-xl flex items-center justify-center text-white shadow-sm`}>
+                        <item.icon size={18} />
                       </div>
                       <div>
-                        <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
+                        <h4 className="text-base font-semibold text-gray-900 dark:text-white">
                           {item.title}
                         </h4>
-                        <p className="text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                           {item.content}
                         </p>
                       </div>
@@ -202,16 +264,17 @@ export const Contact: React.FC = () => {
             {/* Map Placeholder */}
             <AnimatedSection animation="slideRight" delay={200}>
               <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden h-64">
-                <div 
-                  className="h-full w-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center"
-                >
-                  <div className="text-center">
-                    <FiMapPin className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                    <p className="text-gray-600 dark:text-gray-400 font-medium">
-                      Interactive Map
-                    </p>
-                  </div>
-                </div>
+                <iframe
+                  title="Location Map"
+                  src="https://maps.google.com/maps?q=Desouk,%20Kafr%20El-Sheikh,%20Egypt&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full grayscale hover:grayscale-0 transition-all duration-500"
+                ></iframe>
               </div>
             </AnimatedSection>
           </div>
