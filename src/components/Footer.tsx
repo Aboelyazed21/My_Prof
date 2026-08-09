@@ -5,6 +5,9 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
+  
+  // دالة لجلب السنة الحالية تلقائياً
+  const currentYear = new Date().getFullYear();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -89,16 +92,17 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2025 Aboelyazed Hatem. {t('allRightsReserved')}
+        {/* Bottom Section - تم التعديل هنا لتوسيط العناصر وإضافة السنة التلقائية */}
+        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col items-center justify-center space-y-4">
+          <p className="text-gray-400 text-sm text-center">
+            © {currentYear} Aboelyazed Hatem. {t('allRightsReserved')}
           </p>
-          <div className="flex items-center space-x-6 space-x-reverse">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+          <div className="flex items-center gap-4 text-sm">
+            <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
               {t('privacyPolicy')}
             </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm">
+            <span className="text-gray-600">|</span>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">
               {t('termsConditions')}
             </a>
           </div>

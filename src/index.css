@@ -13,6 +13,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* منع ظهور المربع الأزرق عند الضغط على الشاشات اللمسية */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* منع الـ Scroll العرضي على الموبايلات */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
 }
 
 html {
@@ -24,6 +32,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* تحسين عرض الخطوط على الشاشات الصغيرة */
+  text-size-adjust: 100%;
 }
 
 [dir="rtl"] body {
@@ -32,7 +42,7 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px; /* تصغير حجم السكرول بار قليلاً ليتناسب مع الموبايل */
 }
 
 ::-webkit-scrollbar-track {
@@ -107,19 +117,19 @@ body {
 
 /* Utility classes */
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .animate-slide-in-left {
-  animation: slideInLeft 0.6s ease-out;
+  animation: slideInLeft 0.6s ease-out forwards;
 }
 
 .animate-slide-in-right {
-  animation: slideInRight 0.6s ease-out;
+  animation: slideInRight 0.6s ease-out forwards;
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.6s ease-out;
+  animation: scaleIn 0.6s ease-out forwards;
 }
 
 /* Focus styles */
@@ -145,6 +155,7 @@ body {
 /* Glass effect */
 .glass {
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* لدعم متصفحات سفاري وآيفون */
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -173,28 +184,38 @@ body {
   transform: translate(-50%, -50%);
 }
 
-.btn-hover-effect:hover::before {
-  width: 300px;
-  height: 300px;
+/* تفعيل تأثير الـ Hover فقط على الأجهزة التي تدعم الماوس (الديسكتوب) */
+@media (hover: hover) {
+  .btn-hover-effect:hover::before {
+    width: 300px;
+    height: 300px;
+  }
 }
 
-/* Smooth transitions for theme switching */
-* {
+/* Smooth transitions for theme switching - تم تحديد العناصر لحماية أداء الموبايل */
+body, nav, header, footer, section, div, p, span, h1, h2, h3, h4, h5, h6, a, button {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom form styles */
 input[type="text"],
 input[type="email"],
+input[type="tel"],
 textarea {
   transition: all 0.3s ease;
+  /* منع تقريب الشاشة (Zoom) التلقائي في الآيفون عند الكتابة */
+  font-size: 16px; 
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-textarea:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+/* تفعيل حركة الرفع فقط على الديسكتوب لأنها مزعجة مع لوحة مفاتيح الموبايل */
+@media (min-width: 768px) {
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  textarea:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
 }
 
 /* Loading animations */

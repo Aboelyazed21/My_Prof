@@ -4,6 +4,7 @@ import { SiBehance } from 'react-icons/si';
 import { useLanguage } from '../contexts/LanguageContext';
 import { AnimatedSection } from './AnimatedSection';
 import profileImage from '../assets/profile.jpg';
+import { TypeAnimation } from 'react-type-animation';
 
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
@@ -33,18 +34,46 @@ export const Hero: React.FC = () => {
           <div className="space-y-8">
             <AnimatedSection animation="slideUp" delay={200}>
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                <span className="block text-gray-800 dark:text-gray-200 mb-2">
-                  {t('hello')}
+                {/* تأثير الكتابة التلقائية للاسم والمهارات */}
+                <span className="block text-gray-800 dark:text-gray-200 min-h-[1.2em]">
+                  <TypeAnimation
+                    sequence={[
+                      "I'm Eng. Aboelyazed",
+                      1500,
+                      "I'm a Front-End Developer",
+                      1500,
+                      "I'm a Software Engineer",
+                      1500,
+                      "I'm a Data Analyst",
+                      1500,
+                      "I'm a Software Tester",
+                      1500
+                    ]}
+                    wrapper="span"
+                    speed={50}
+                    deletionSpeed={70}
+                    repeat={Infinity}
+                    cursor={true}
+                  />
                 </span>
-                {/* <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {t('name')}
-                </span> */}
               </h1>
             </AnimatedSection>
 
             <AnimatedSection animation="slideUp" delay={400}>
-              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
-                {t('heroDescription')}
+              {/* min-h-[4em] لحجز مساحة للوصف عشان باقي العناصر متنطش لفوق وتحت */}
+              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl min-h-[6em] md:min-h-[4em]">
+                {/* تأثير الكتابة للوصف مع دعم الترجمة */}
+                <TypeAnimation
+                  sequence={[
+                    // ده هيشغل النص اللي في ملف الترجمة بناءً على اللغة اللي اليوزر مختارها
+                    t('heroDescription') as string,
+                  ]}
+                  wrapper="span"
+                  speed={70}
+                  style={{ display: 'inline-block' }}
+                  repeat={0} // يكتب مرة واحدة بس
+                  cursor={false} // لغينا المؤشر هنا عشان ميشتتش العين عن مؤشر العنوان
+                />
               </p>
             </AnimatedSection>
 
